@@ -7,8 +7,27 @@
         {% endif %}
     </head>
     <body>
-        <div>nick <a href="/index">Home</a></div>
+        <div>
+            {% if not current_user.is_anonymous %}
+             <b href="{{ url_for('user', username=current_user.username) }}">{{ current_user.username }}</b>
+            {% endif %}
+            <a href="{{ url_for('index') }}">Home</a>
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% else %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+        </div>
         <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </body>
 </html>
